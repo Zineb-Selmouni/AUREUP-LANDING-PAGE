@@ -1,6 +1,7 @@
 // Central image registry — Vite bundles and optimises these at build time
 
 import logoImg from '../assets/SVG/White Blue Icon + Text.svg'
+import logoImgLight from '../assets/SVG/Blue Dark Icon + Text.svg'
 import iconImg from '../assets/SVG/Icon.svg'
 import posterImg from '../assets/Social Media/Poster/Poster.jpg'
 import cover1 from '../assets/Social Media/Cover/Social Cover (1).jpg'
@@ -14,6 +15,7 @@ import darkIcon from '../assets/JPG Images/__Dark Background (Icon).jpg'
 
 export {
   logoImg,
+  logoImgLight,
   iconImg,
   posterImg,
   cover1,
