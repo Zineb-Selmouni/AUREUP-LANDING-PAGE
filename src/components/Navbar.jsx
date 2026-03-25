@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import { CaretDown, GlobeHemisphereWest, MoonStars, SunDim } from '@phosphor-icons/react'
+import { CaretDown, GlobeHemisphereWest, List, MoonStars, SunDim, X } from '@phosphor-icons/react'
 import { logoImg, logoImgLight } from '../images.js'
 import { LANGUAGES } from '../i18n.js'
 
@@ -24,16 +24,16 @@ export default function Navbar({
 
   useGSAP(() => {
     gsap.from(navRef.current, {
-      y: -80,
+      y: -20,
       opacity: 0,
-      duration: 1,
+      duration: 0.6,
       ease: 'power3.out',
-      delay: 0.1,
     })
   }, { scope: navRef })
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 60)
+    const onScroll = () => setScrolled(window.scrollY > 28)
+    onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
@@ -52,22 +52,6 @@ export default function Navbar({
   }, [isLanguageOpen])
 
   useEffect(() => {
-    if (!menuOpen) return undefined
-
-    const media = window.matchMedia('(min-width: 768px)')
-    const handleChange = (event) => {
-      if (event.matches) {
-        setMenuOpen(false)
-      }
-    }
-
-    media.addEventListener('change', handleChange)
-    return () => media.removeEventListener('change', handleChange)
-  }, [menuOpen])
-
-  useEffect(() => {
-    if (typeof document === 'undefined') return undefined
-
     document.documentElement.style.overflow = menuOpen ? 'hidden' : ''
     document.body.style.overflow = menuOpen ? 'hidden' : ''
 
@@ -85,14 +69,16 @@ export default function Navbar({
   return (
     <nav ref={navRef} className={`navbar${scrolled ? ' scrolled' : ''}`}>
       <div className="container">
-        <div className="nav-inner">
-          <a href="#home" className="nav-logo">
+        <div className="nav-shell">
+          <a href="#home" className="nav-logo" onClick={handleCloseMenu}>
             <img src={currentLogo} alt="Aure Up" />
           </a>
 
           <ul className="nav-links">
             {copy.links.map((link) => (
-              <li key={link.href}><a href={link.href}>{link.label}</a></li>
+              <li key={link.href}>
+                <a href={link.href}>{link.label}</a>
+              </li>
             ))}
           </ul>
 
@@ -106,9 +92,9 @@ export default function Navbar({
                 aria-label={copy.languageSelector}
                 onClick={() => setIsLanguageOpen((value) => !value)}
               >
-                <GlobeHemisphereWest size={15} weight="regular" className="lang-dropdown-icon" aria-hidden="true" />
+                <GlobeHemisphereWest size={15} weight="regular" />
                 <span>{LANGUAGES.find((option) => option.id === language)?.label}</span>
-                <CaretDown size={14} weight="bold" className="lang-dropdown-caret" aria-hidden="true" />
+                <CaretDown size={14} weight="bold" />
               </button>
 
               <div className="lang-dropdown-menu" role="menu" aria-label={copy.languageSelector}>
@@ -137,17 +123,19 @@ export default function Navbar({
               aria-label={themeLabel}
               onClick={onToggleTheme}
             >
-              <span className="theme-toggle-track">
-                <MoonStars size={14} weight="fill" className="theme-toggle-moon" aria-hidden="true" />
-                <SunDim size={14} weight="regular" className="theme-toggle-sun" aria-hidden="true" />
-                <span className="theme-toggle-thumb" />
-              </span>
+              <MoonStars size={14} weight="fill" className="theme-toggle-moon" />
+              <SunDim size={14} weight="regular" className="theme-toggle-sun" />
+              <span className="theme-toggle-thumb" />
             </button>
+
+            <a href="#waitlist" className="btn btn-primary nav-join-btn">
+              {menuCtaLabel}
+            </a>
           </div>
 
           <button
             type="button"
-            className={`hamburger${menuOpen ? ' open' : ''}`}
+            className="hamburger"
             aria-label={copy.toggleMenu}
             aria-expanded={menuOpen}
             onClick={() => {
@@ -155,25 +143,20 @@ export default function Navbar({
               setIsLanguageOpen(false)
             }}
           >
-            <span /><span /><span />
+            {menuOpen ? <X size={20} weight="bold" /> : <List size={20} weight="bold" />}
           </button>
         </div>
       </div>
 
-      <div
-        className={`mobile-menu${menuOpen ? ' open' : ''}`}
-        aria-hidden={!menuOpen}
-        onClick={handleCloseMenu}
-      >
-        <div className="mobile-menu-panel" onClick={(event) => event.stopPropagation()}>
+      <div className={`mobile-menu${menuOpen ? ' open' : ''}`} aria-hidden={!menuOpen}>
+        <div className="mobile-menu-panel">
           <div className="mobile-menu-links">
             {copy.links.map((link) => (
               <a key={link.href} href={link.href} onClick={handleCloseMenu}>{link.label}</a>
             ))}
           </div>
 
-          <div className="mobile-menu-language">
-            <span className="mobile-menu-label">{copy.languageSelector}</span>
+          <div className="mobile-menu-controls">
             <div className="mobile-language-list" role="group" aria-label={copy.languageSelector}>
               {LANGUAGES.map((option) => (
                 <button
@@ -187,21 +170,16 @@ export default function Navbar({
                 </button>
               ))}
             </div>
-          </div>
 
-          <button
-            type="button"
-            className="mobile-theme-button"
-            aria-label={themeLabel}
-            onClick={onToggleTheme}
-          >
-            <span className="mobile-menu-label">{themeLabel}</span>
-            <span className="theme-toggle-track">
-              <MoonStars size={14} weight="fill" className="theme-toggle-moon" aria-hidden="true" />
-              <SunDim size={14} weight="regular" className="theme-toggle-sun" aria-hidden="true" />
-              <span className="theme-toggle-thumb" />
-            </span>
-          </button>
+            <button
+              type="button"
+              className="mobile-theme-button"
+              aria-label={themeLabel}
+              onClick={onToggleTheme}
+            >
+              {themeLabel}
+            </button>
+          </div>
 
           <a href="#waitlist" className="btn btn-primary mobile-menu-cta" onClick={handleCloseMenu}>
             {menuCtaLabel}

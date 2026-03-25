@@ -15,6 +15,7 @@ import { applyTheme, getStoredTheme, THEME_STORAGE_KEY, THEMES } from './theme.j
 export default function App() {
   const [theme, setTheme] = useState(getStoredTheme)
   const [language, setLanguage] = useState(getStoredLanguage)
+  const [waitlistEmail, setWaitlistEmail] = useState('')
   const copy = getCopy(language)
 
   useEffect(() => {
@@ -44,14 +45,32 @@ export default function App() {
         onToggleTheme={toggleTheme}
       />
 
-      <div className="desktop-only"><Hero copy={copy.hero} /></div>
-      <div className="mobile-only"><HeroMobile copy={copy.hero} /></div>
+      <div className="desktop-only">
+        <Hero
+          copy={copy.hero}
+          waitlistCopy={copy.waitlist}
+          email={waitlistEmail}
+          onEmailChange={setWaitlistEmail}
+        />
+      </div>
+      <div className="mobile-only">
+        <HeroMobile
+          copy={copy.hero}
+          waitlistCopy={copy.waitlist}
+          email={waitlistEmail}
+          onEmailChange={setWaitlistEmail}
+        />
+      </div>
 
       <Problem copy={copy.problem} />
       <Features copy={copy.features} />
       <HowItWorks copy={copy.how} />
       <Testimonials copy={copy.testimonials} />
-      <Waitlist copy={copy.waitlist} />
+      <Waitlist
+        copy={copy.waitlist}
+        email={waitlistEmail}
+        onEmailChange={setWaitlistEmail}
+      />
       <FAQ copy={copy.faq} />
       <Footer theme={theme} copy={copy.footer} />
     </>

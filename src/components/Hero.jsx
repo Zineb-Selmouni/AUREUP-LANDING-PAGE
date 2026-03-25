@@ -1,142 +1,172 @@
 import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import { cover2, cover3 } from '../images.js'
+import { ArrowRight } from '@phosphor-icons/react'
+import { cover2 } from '../images.js'
 
-const PARTICLE_COUNT = 22
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
-function PhoneFrame({ src, alt }) {
+function PhoneFrame({ src, alt, className }) {
   return (
-    <div className="phone-frame">
-      <div className="phone-island" />
-      <div className="phone-btn phone-silent" />
-      <div className="phone-btn phone-vol-up" />
-      <div className="phone-btn phone-vol-down" />
-      <div className="phone-btn phone-power" />
-      <div className="phone-screen">
-        <img src={src} alt={alt} />
+    <div className={`phone-wrap ${className ?? ''}`}>
+      <div className="phone-frame">
+        <div className="phone-island">
+          <span className="phone-island-speaker" />
+          <span className="phone-island-camera" />
+        </div>
+        <div className="phone-btn phone-silent" />
+        <div className="phone-btn phone-vol-up" />
+        <div className="phone-btn phone-vol-down" />
+        <div className="phone-btn phone-power" />
+        <div className="phone-screen">
+          <img src={src} alt={alt} />
+        </div>
       </div>
     </div>
   )
 }
 
-export default function Hero({ copy }) {
+export default function Hero({ copy, waitlistCopy, email, onEmailChange }) {
   const heroRef = useRef(null)
 
   useGSAP(() => {
-    const tl = gsap.timeline({ delay: 0.3 })
+    const timeline = gsap.timeline({ delay: 0.1 })
 
-    gsap.utils.toArray('.particle').forEach((particle) => {
-      gsap.set(particle, {
-        x: gsap.utils.random(-480, 480),
-        y: gsap.utils.random(50, 600),
-        scale: gsap.utils.random(0.3, 1.5),
-        opacity: 0,
-      })
+    timeline
+      .from('.hero-badge', { y: 24, opacity: 0, duration: 0.6, ease: 'power3.out' })
+      .from('.hero-title-line', { y: 42, opacity: 0, stagger: 0.1, duration: 0.8, ease: 'power3.out' }, '-=0.3')
+      .from('.hero-sub', { y: 24, opacity: 0, duration: 0.7, ease: 'power3.out' }, '-=0.45')
+      .from('.hero-actions', { y: 20, opacity: 0, duration: 0.55, ease: 'power3.out' }, '-=0.45')
+      .from('.hero-visual-card', { y: 28, opacity: 0, stagger: 0.1, duration: 0.7, ease: 'power3.out' }, '-=0.65')
 
-      gsap.to(particle, {
-        y: `-=${gsap.utils.random(500, 950)}`,
-        x: `+=${gsap.utils.random(-120, 120)}`,
-        opacity: gsap.utils.random(0.18, 0.7),
-        duration: gsap.utils.random(10, 22),
-        delay: gsap.utils.random(0, 12),
-        repeat: -1,
-        ease: 'none',
-        onRepeat() {
-          gsap.set(particle, {
-            y: gsap.utils.random(300, 700),
-            x: gsap.utils.random(-480, 480),
-            opacity: 0,
-          })
-        },
-      })
+    gsap.to('.hero-phone-front', {
+      y: -12,
+      x: 3,
+      rotation: 1.5,
+      duration: 5.2,
+      repeat: -1,
+      yoyo: true,
+      ease: 'sine.inOut',
     })
 
-    tl
-      .from('.hero-badge', { y: 24, opacity: 0, duration: 0.8, ease: 'power3.out' })
-      .from('.title-word', { yPercent: 110, opacity: 0, duration: 0.9, stagger: 0.1, ease: 'power4.out' }, '-=0.4')
-      .from('.hero-sub', { y: 28, opacity: 0, duration: 0.8, ease: 'power3.out' }, '-=0.5')
-      .from('.hero-btn', { y: 20, opacity: 0, scale: 0.88, duration: 0.65, ease: 'back.out(1.6)' }, '-=0.45')
-      .from('.phone-wrap-2', { y: 100, opacity: 0, duration: 1.2, ease: 'power3.out' }, '-=1.4')
-      .from('.phone-wrap-1', { y: 80, opacity: 0, duration: 1.1, ease: 'power3.out' }, '-=0.9')
+    const visualPanel = heroRef.current?.querySelector('.hero-visual-panel')
+    const phoneX = gsap.quickTo('.hero-phone-front', 'x', { duration: 0.6, ease: 'power3.out' })
+    const phoneY = gsap.quickTo('.hero-phone-front', 'y', { duration: 0.6, ease: 'power3.out' })
+    const auraX = gsap.quickTo('.hero-phone-aura', 'x', { duration: 0.7, ease: 'power3.out' })
+    const auraY = gsap.quickTo('.hero-phone-aura', 'y', { duration: 0.7, ease: 'power3.out' })
+    const reflectionX = gsap.quickTo('.hero-phone-reflection', 'x', { duration: 0.55, ease: 'power3.out' })
 
-    gsap.to('.phone-wrap-1', { y: -13, duration: 3.8, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 1 })
-    gsap.to('.phone-wrap-2', { y: -8, duration: 4.6, repeat: -1, yoyo: true, ease: 'sine.inOut', delay: 2.2 })
-    gsap.from('.hero-grid', { opacity: 0, duration: 2.5 })
+    const handleMove = (event) => {
+      if (!visualPanel) return
+      const bounds = visualPanel.getBoundingClientRect()
+      const relativeX = (event.clientX - bounds.left) / bounds.width - 0.5
+      const relativeY = (event.clientY - bounds.top) / bounds.height - 0.5
+
+      phoneX(relativeX * 10)
+      phoneY(relativeY * 10 - 12)
+      auraX(relativeX * 18)
+      auraY(relativeY * 18)
+      reflectionX(relativeX * 16)
+    }
+
+    const handleLeave = () => {
+      phoneX(0)
+      phoneY(-12)
+      auraX(0)
+      auraY(0)
+      reflectionX(0)
+    }
+
+    visualPanel?.addEventListener('pointermove', handleMove)
+    visualPanel?.addEventListener('pointerleave', handleLeave)
+
+    return () => {
+      visualPanel?.removeEventListener('pointermove', handleMove)
+      visualPanel?.removeEventListener('pointerleave', handleLeave)
+    }
   }, { scope: heroRef })
+
+  const handleHeroSubmit = (event) => {
+    event.preventDefault()
+
+    const waitlistSection = document.getElementById('waitlist')
+    if (!waitlistSection) return
+
+    const trimmed = email.trim()
+    if (trimmed) {
+      onEmailChange(trimmed)
+    }
+
+    waitlistSection.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  }
 
   return (
     <section ref={heroRef} className="hero" id="home">
+      <div className="hero-ambient hero-ambient-a" />
+      <div className="hero-ambient hero-ambient-b" />
       <div className="hero-grid" />
-      <div className="hero-orb hero-orb-1" />
-      <div className="hero-orb hero-orb-2" />
-      <div className="hero-orb hero-orb-3" />
-      <div className="hero-orb hero-orb-4" />
-
-      <div className="hero-rings">
-        <div className="hero-ring" />
-        <div className="hero-ring" />
-        <div className="hero-ring" />
-        <div className="hero-ring" />
-      </div>
-
-      <div className="hero-particles">
-        {Array.from({ length: PARTICLE_COUNT }, (_, index) => (
-          <div key={index} className="particle" />
-        ))}
-      </div>
 
       <div className="container">
-        <div className="hero-inner">
+        <div className="hero-layout">
           <div className="hero-copy">
-              <div className="hero-badge">
-                <span className="badge-dot" />
-                {copy.badge}
-              </div>
-
-              <h1 className="hero-title">
-                {copy.titleLines.map((line, lineIndex) => (
-                <span key={lineIndex} className="title-line">
-                    {line.map(({ text, accent }, wordIndex) => (
-                      <span key={`${text}-${wordIndex}`} className="title-mask">
-                        <span className={`title-word${accent ? ' grad-text' : ''}`}>
-                          {text}
-                        </span>
-                      </span>
-                    ))}
-                  </span>
-                ))}
-              </h1>
-
-              <p className="hero-sub">
-                {copy.subtitle}
-              </p>
-
-              <div className="hero-actions">
-                <a href="#waitlist" className="btn btn-primary hero-btn hero-cta-btn">
-                  {copy.cta}
-                  <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14M12 5l7 7-7 7" />
-                  </svg>
-                </a>
-              </div>
+            <div className="hero-badge">
+              <span className="hero-badge-dot" />
+              {copy.badge}
             </div>
 
-            <div className="hero-visual">
-              <div className="phone-duo">
-                <div className="phone-glow" />
+            <h1 className="hero-title">
+              {copy.titleLines.map((line, lineIndex) => (
+                <span key={lineIndex} className="hero-title-line">
+                  {line.map(({ text, accent }, wordIndex) => (
+                    <span key={`${text}-${wordIndex}`} className={accent ? 'grad-text' : ''}>
+                      {text}
+                    </span>
+                  ))}
+                </span>
+              ))}
+            </h1>
 
-                <div className="phone-wrap phone-wrap-2">
-                  <PhoneFrame src={cover3} alt={copy.secondaryPhoneAlt} />
-                </div>
+            <p className="hero-sub">{copy.subtitle}</p>
 
-                <div className="phone-wrap phone-wrap-1">
-                  <PhoneFrame src={cover2} alt={copy.primaryPhoneAlt} />
+            <div className="hero-actions">
+              <form className="hero-signup-form" onSubmit={handleHeroSubmit}>
+                <input
+                  type="email"
+                  className="hero-signup-input"
+                  placeholder={waitlistCopy.placeholder}
+                  value={email}
+                  onChange={(event) => onEmailChange(event.target.value)}
+                  autoComplete="email"
+                  dir="ltr"
+                  aria-label={waitlistCopy.placeholder}
+                />
+
+                <button
+                  type="submit"
+                  className="btn btn-primary hero-primary-cta"
+                  disabled={email.trim().length > 0 && !EMAIL_RE.test(email.trim())}
+                >
+                  {waitlistCopy.cta}
+                  <ArrowRight size={18} weight="bold" />
+                </button>
+              </form>
+            </div>
+          </div>
+
+          <div className="hero-visual">
+            <div className="hero-visual-panel liquid-card hero-visual-card">
+              <div className="hero-story-stage">
+                <div className="hero-phone-stage hero-phone-stage-clean">
+                  <div className="hero-phone-aura" aria-hidden="true" />
+                  <div className="hero-phone-reflection" aria-hidden="true" />
+                  <div className="hero-device-shadow" aria-hidden="true" />
+                  <PhoneFrame src={cover2} alt={copy.primaryPhoneAlt} className="hero-phone-front" />
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </section>
-    )
-  }
+      </div>
+    </section>
+  )
+}
