@@ -47,7 +47,7 @@ export default function Testimonials({ copy }) {
                 <span className="testimonial-quote-icon">
                   <Quotes size={18} weight="fill" />
                 </span>
-                <span className="testimonial-stars">5.0</span>
+                <span className="testimonial-stars">{copy.ratingLabel}</span>
               </div>
 
               <p className="testimonial-quote">{item.quote}</p>

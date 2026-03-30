@@ -33,8 +33,8 @@ export default function Problem({ copy }) {
           <div className="problem-visual-grid">
             <div className="problem-card-visual liquid-card problem-card-main">
               <div className="problem-card-main-head">
-                <span className="problem-card-caption">Financial noise</span>
-                <span className="problem-card-status">Needs clarity</span>
+                <span className="problem-card-caption">{copy.visual.caption}</span>
+                <span className="problem-card-status">{copy.visual.status}</span>
               </div>
 
               <div className="problem-noise-chart" aria-hidden="true">
@@ -56,14 +56,17 @@ export default function Problem({ copy }) {
                 </svg>
 
                 <div className="problem-noise-legend">
-                  <span><i className="problem-noise-dot dot-a" />Checking</span>
-                  <span><i className="problem-noise-dot dot-b" />Card activity</span>
-                  <span><i className="problem-noise-dot dot-c" />Savings</span>
+                  {copy.visual.legend.map((label, index) => (
+                    <span key={label}>
+                      <i className={`problem-noise-dot dot-${String.fromCharCode(97 + index)}`} />
+                      {label}
+                    </span>
+                  ))}
                 </div>
               </div>
 
               <div className="problem-card-main-foot">
-                <strong>Multiple moving parts</strong>
+                <strong>{copy.visual.summaryTitle}</strong>
                 <p>{copy.highlight}</p>
               </div>
             </div>

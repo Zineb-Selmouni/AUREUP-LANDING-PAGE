@@ -69,14 +69,14 @@ export default function HowItWorks({ copy }) {
                 <div className="phone-btn phone-vol-down" />
                 <div className="phone-btn phone-power" />
                 <div className="hm-phone-screen">
-                  <img src={cover1} alt="Aure Up preview" />
+                  <img src={cover1} alt={copy.phoneAlt} />
                 </div>
               </div>
             </div>
 
             <div className="how-journey-overlay how-journey-overlay-top">
-              <strong>Weekly rhythm</strong>
-              <span>Signals arrive in the right order</span>
+              <strong>{copy.overlays.top.title}</strong>
+              <span>{copy.overlays.top.body}</span>
             </div>
 
             <div className="how-journey-overlay how-journey-overlay-bottom">
@@ -84,8 +84,8 @@ export default function HowItWorks({ copy }) {
                 <ChartLineUp size={18} weight="fill" />
               </span>
               <div>
-                <strong>Confidence builds over time</strong>
-                <span>Small steps, clearer patterns, smarter choices</span>
+                <strong>{copy.overlays.bottom.title}</strong>
+                <span>{copy.overlays.bottom.body}</span>
               </div>
             </div>
           </div>

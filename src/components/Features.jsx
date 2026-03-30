@@ -5,15 +5,11 @@ import { BookOpenText, Brain, ChartLineUp, HouseLine, Target } from '@phosphor-i
 
 const FEATURE_ICONS = [ChartLineUp, BookOpenText, Brain, Target]
 
-function FeatureVisual({ index }) {
+function FeatureVisual({ index, copy }) {
   if (index === 0) {
     return (
       <div className="feature-visual feature-visual-transactions" aria-hidden="true">
-        {[
-          { label: 'Carrefour', meta: 'Groceries', amount: '-340 MAD' },
-          { label: 'Netflix', meta: 'Subscriptions', amount: '-119 MAD' },
-          { label: 'Taxi', meta: 'Transport', amount: '-85 MAD' },
-        ].map((item) => (
+        {copy.transactions.map((item) => (
           <div key={item.label} className="feature-transaction-row">
             <div className="feature-transaction-left">
               <span className="feature-transaction-dot" />
@@ -32,14 +28,15 @@ function FeatureVisual({ index }) {
   if (index === 1) {
     return (
       <div className="feature-visual feature-visual-learning" aria-hidden="true">
-        <div className="feature-learning-card">
-          <strong>Budget basics</strong>
-          <span>8 min lesson</span>
-        </div>
-        <div className="feature-learning-card active">
-          <strong>Saving mindset</strong>
-          <span>Interactive path</span>
-        </div>
+        {copy.lessons.map((lesson, lessonIndex) => (
+          <div
+            key={lesson.title}
+            className={`feature-learning-card${lessonIndex === 1 ? ' active' : ''}`}
+          >
+            <strong>{lesson.title}</strong>
+            <span>{lesson.meta}</span>
+          </div>
+        ))}
       </div>
     )
   }
@@ -47,12 +44,11 @@ function FeatureVisual({ index }) {
   if (index === 2) {
     return (
       <div className="feature-visual feature-visual-ai" aria-hidden="true">
-        <div className="feature-ai-bubble">
-          Spending is lower this week. You can safely move more toward savings.
-        </div>
+        <div className="feature-ai-bubble">{copy.ai.bubble}</div>
         <div className="feature-ai-tags">
-          <span>Dining -18%</span>
-          <span>Savings on track</span>
+          {copy.ai.tags.map((tag) => (
+            <span key={tag}>{tag}</span>
+          ))}
         </div>
       </div>
     )
@@ -63,13 +59,13 @@ function FeatureVisual({ index }) {
       <div className="feature-goal-summary">
         <HouseLine size={18} weight="fill" />
         <div>
-          <strong>Emergency fund</strong>
-          <span>7,300 MAD of 10,000 MAD</span>
+          <strong>{copy.goal.title}</strong>
+          <span>{copy.goal.progressLabel}</span>
         </div>
       </div>
       <div className="feature-goal-progress">
         <span className="feature-goal-bar" />
-        <strong>73%</strong>
+        <strong>{copy.goal.progressValue}</strong>
       </div>
     </div>
   )
@@ -113,7 +109,7 @@ export default function Features({ copy }) {
                     <p>{feature.desc}</p>
                   </div>
                 </div>
-                <FeatureVisual index={index} />
+                <FeatureVisual index={index} copy={copy.visuals} />
               </article>
             )
           })}
