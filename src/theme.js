@@ -6,10 +6,10 @@ export const THEMES = {
 }
 
 export function getStoredTheme() {
-  if (typeof window === 'undefined') return THEMES.dark
+  if (typeof window === 'undefined') return THEMES.light
 
   const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY)
-  return savedTheme === THEMES.light ? THEMES.light : THEMES.dark
+  return savedTheme === THEMES.dark ? THEMES.dark : THEMES.light
 }
 
 export function applyTheme(theme) {

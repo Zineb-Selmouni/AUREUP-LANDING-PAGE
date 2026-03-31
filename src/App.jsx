@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import Navbar       from './components/Navbar.jsx'
 import Hero         from './components/Hero.jsx'
-import HeroMobile   from './components/HeroMobile.jsx'
 import Problem      from './components/Problem.jsx'
 import Features     from './components/Features.jsx'
 import HowItWorks   from './components/HowItWorks.jsx'
@@ -45,22 +44,12 @@ export default function App() {
         onToggleTheme={toggleTheme}
       />
 
-      <div className="desktop-only">
-        <Hero
-          copy={copy.hero}
-          waitlistCopy={copy.waitlist}
-          email={waitlistEmail}
-          onEmailChange={setWaitlistEmail}
-        />
-      </div>
-      <div className="mobile-only">
-        <HeroMobile
-          copy={copy.hero}
-          waitlistCopy={copy.waitlist}
-          email={waitlistEmail}
-          onEmailChange={setWaitlistEmail}
-        />
-      </div>
+      <Hero
+        copy={copy.hero}
+        waitlistCopy={copy.waitlist}
+        email={waitlistEmail}
+        onEmailChange={setWaitlistEmail}
+      />
 
       <Problem copy={copy.problem} />
       <Features copy={copy.features} />

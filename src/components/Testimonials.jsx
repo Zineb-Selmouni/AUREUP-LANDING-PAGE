@@ -4,22 +4,22 @@ import { gsap } from 'gsap'
 import { Quotes } from '@phosphor-icons/react'
 
 const AVATAR_BACKGROUNDS = [
-  'linear-gradient(135deg, #2f59ff 0%, #0f1f6a 100%)',
-  'linear-gradient(135deg, #1bb6ab 0%, #0f5a84 100%)',
-  'linear-gradient(135deg, #6d59ff 0%, #2a2f7d 100%)',
+  'linear-gradient(135deg, #316cff 0%, #09006e 100%)',
+  'linear-gradient(135deg, #5b82ff 0%, #1f3fb4 100%)',
+  'linear-gradient(135deg, #1e2c74 0%, #316cff 100%)',
 ]
 
 export default function Testimonials({ copy }) {
   const ref = useRef(null)
 
   useGSAP(() => {
-    gsap.from('.testimonial-stat, .testimonial-card', {
-      y: 28,
+    gsap.from('.testimonial-card', {
+      y: 24,
       opacity: 0,
       stagger: 0.1,
-      duration: 0.7,
+      duration: 0.68,
       ease: 'power3.out',
-      scrollTrigger: { trigger: ref.current, start: 'top 78%' },
+      scrollTrigger: { trigger: ref.current, start: 'top 80%' },
     })
   }, { scope: ref })
 
@@ -29,15 +29,7 @@ export default function Testimonials({ copy }) {
         <div className="t-header tc">
           <span className="eyebrow">{copy.eyebrow}</span>
           <h2 className="section-title">{copy.title}</h2>
-        </div>
-
-        <div className="testimonial-stats">
-          {copy.stats.map((stat) => (
-            <div key={stat.label} className="testimonial-stat liquid-card">
-              <strong>{stat.value}</strong>
-              <span>{stat.label}</span>
-            </div>
-          ))}
+          <p className="sub">{copy.subtitle}</p>
         </div>
 
         <div className="testimonial-grid">
@@ -47,7 +39,7 @@ export default function Testimonials({ copy }) {
                 <span className="testimonial-quote-icon">
                   <Quotes size={18} weight="fill" />
                 </span>
-                <span className="testimonial-stars">{copy.ratingLabel}</span>
+                <span className="testimonial-badge">{copy.ratingLabel}</span>
               </div>
 
               <p className="testimonial-quote">{item.quote}</p>

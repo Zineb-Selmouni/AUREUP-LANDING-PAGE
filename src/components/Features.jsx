@@ -1,87 +1,21 @@
 import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import { BookOpenText, Brain, ChartLineUp, HouseLine, Target } from '@phosphor-icons/react'
+import { BookOpenText, Brain, ChartLineUp, Target } from '@phosphor-icons/react'
 
 const FEATURE_ICONS = [ChartLineUp, BookOpenText, Brain, Target]
-
-function FeatureVisual({ index, copy }) {
-  if (index === 0) {
-    return (
-      <div className="feature-visual feature-visual-transactions" aria-hidden="true">
-        {copy.transactions.map((item) => (
-          <div key={item.label} className="feature-transaction-row">
-            <div className="feature-transaction-left">
-              <span className="feature-transaction-dot" />
-              <div>
-                <strong>{item.label}</strong>
-                <span>{item.meta}</span>
-              </div>
-            </div>
-            <strong>{item.amount}</strong>
-          </div>
-        ))}
-      </div>
-    )
-  }
-
-  if (index === 1) {
-    return (
-      <div className="feature-visual feature-visual-learning" aria-hidden="true">
-        {copy.lessons.map((lesson, lessonIndex) => (
-          <div
-            key={lesson.title}
-            className={`feature-learning-card${lessonIndex === 1 ? ' active' : ''}`}
-          >
-            <strong>{lesson.title}</strong>
-            <span>{lesson.meta}</span>
-          </div>
-        ))}
-      </div>
-    )
-  }
-
-  if (index === 2) {
-    return (
-      <div className="feature-visual feature-visual-ai" aria-hidden="true">
-        <div className="feature-ai-bubble">{copy.ai.bubble}</div>
-        <div className="feature-ai-tags">
-          {copy.ai.tags.map((tag) => (
-            <span key={tag}>{tag}</span>
-          ))}
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <div className="feature-visual feature-visual-goal" aria-hidden="true">
-      <div className="feature-goal-summary">
-        <HouseLine size={18} weight="fill" />
-        <div>
-          <strong>{copy.goal.title}</strong>
-          <span>{copy.goal.progressLabel}</span>
-        </div>
-      </div>
-      <div className="feature-goal-progress">
-        <span className="feature-goal-bar" />
-        <strong>{copy.goal.progressValue}</strong>
-      </div>
-    </div>
-  )
-}
 
 export default function Features({ copy }) {
   const sectionRef = useRef(null)
 
   useGSAP(() => {
     gsap.from('.feature-card', {
-      y: 36,
+      y: 30,
       opacity: 0,
       stagger: 0.12,
-      duration: 0.75,
+      duration: 0.72,
       ease: 'power3.out',
-      scrollTrigger: { trigger: sectionRef.current, start: 'top 76%' },
+      scrollTrigger: { trigger: sectionRef.current, start: 'top 78%' },
     })
   }, { scope: sectionRef })
 
@@ -99,17 +33,19 @@ export default function Features({ copy }) {
             const Icon = FEATURE_ICONS[index]
 
             return (
-              <article key={feature.title} className="feature-card liquid-card">
-                <div className="feature-card-head">
+              <article
+                key={feature.title}
+                className={`feature-card liquid-card${feature.accent ? ' feature-card-accent' : ''}`}
+              >
+                <div className="feature-card-top">
                   <span className="feature-icon">
                     <Icon size={22} weight="fill" />
                   </span>
-                  <div className="feature-card-copy">
-                    <h3>{feature.title}</h3>
-                    <p>{feature.desc}</p>
-                  </div>
+                  <span className="feature-label">{feature.label}</span>
                 </div>
-                <FeatureVisual index={index} copy={copy.visuals} />
+
+                <h3>{feature.title}</h3>
+                <p>{feature.desc}</p>
               </article>
             )
           })}

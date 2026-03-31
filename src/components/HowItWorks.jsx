@@ -1,31 +1,21 @@
-import { useRef } from 'react'
+import { Fragment, useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import { ChartLineUp, CirclesThreePlus, CompassTool, Sparkle } from '@phosphor-icons/react'
-import { cover1 } from '../images.js'
+import { ArrowRight, CompassTool, Pulse, Wallet } from '@phosphor-icons/react'
 
-const STEP_ICONS = [CirclesThreePlus, CompassTool, Sparkle]
-const STEP_ACCENTS = ['sand', 'mint', 'lavender']
+const STEP_ICONS = [Wallet, Pulse, CompassTool]
 
 export default function HowItWorks({ copy }) {
   const ref = useRef(null)
 
   useGSAP(() => {
-    gsap.from('.how-journey-card, .how-journey-visual, .how-summary-card', {
-      y: 30,
+    gsap.from('.how-card, .how-arrow', {
+      y: 26,
       opacity: 0,
-      stagger: 0.12,
-      duration: 0.7,
+      stagger: 0.1,
+      duration: 0.68,
       ease: 'power3.out',
-      scrollTrigger: { trigger: ref.current, start: 'top 76%' },
-    })
-
-    gsap.to('.how-floating-phone', {
-      y: -14,
-      duration: 4.2,
-      repeat: -1,
-      yoyo: true,
-      ease: 'sine.inOut',
+      scrollTrigger: { trigger: ref.current, start: 'top 80%' },
     })
   }, { scope: ref })
 
@@ -35,70 +25,35 @@ export default function HowItWorks({ copy }) {
         <div className="how-header tc">
           <span className="eyebrow">{copy.eyebrow}</span>
           <h2 className="section-title">{copy.title}</h2>
+          <p className="sub">{copy.subtitle}</p>
         </div>
 
-        <div className="how-journey">
-          <div className="how-journey-strip">
-            <div className="how-journey-line" aria-hidden="true" />
+        <div className="how-flow" aria-label={copy.title}>
+          {copy.steps.map((step, index) => {
+            const Icon = STEP_ICONS[index]
 
-            {copy.steps.map((step, index) => {
-              const Icon = STEP_ICONS[index]
+            return (
+              <Fragment key={step.num}>
+                <article className="how-card liquid-card">
+                  <div className="how-card-top">
+                    <span className="how-step-number">{`0${step.num}`}</span>
+                    <span className="how-step-icon">
+                      <Icon size={20} weight="fill" />
+                    </span>
+                  </div>
 
-              return (
-                <article
-                  key={step.num}
-                  className={`how-journey-card how-journey-card-${STEP_ACCENTS[index]} liquid-card`}
-                >
-                  <div className="how-journey-marker">{`0${step.num}`}</div>
-                  <span className="how-step-icon-chip">
-                    <Icon size={18} weight="fill" />
-                  </span>
                   <h3>{step.title}</h3>
                   <p>{step.desc}</p>
                 </article>
-              )
-            })}
-          </div>
 
-          <div className="how-journey-visual">
-            <div className="how-floating-phone">
-              <div className="hm-phone-frame">
-                <div className="hm-phone-island" />
-                <div className="phone-btn phone-silent" />
-                <div className="phone-btn phone-vol-up" />
-                <div className="phone-btn phone-vol-down" />
-                <div className="phone-btn phone-power" />
-                <div className="hm-phone-screen">
-                  <img src={cover1} alt={copy.phoneAlt} />
-                </div>
-              </div>
-            </div>
-
-            <div className="how-journey-overlay how-journey-overlay-top">
-              <strong>{copy.overlays.top.title}</strong>
-              <span>{copy.overlays.top.body}</span>
-            </div>
-
-            <div className="how-journey-overlay how-journey-overlay-bottom">
-              <span className="how-step-icon-chip">
-                <ChartLineUp size={18} weight="fill" />
-              </span>
-              <div>
-                <strong>{copy.overlays.bottom.title}</strong>
-                <span>{copy.overlays.bottom.body}</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="how-summary-card liquid-card">
-            <span className="how-showcase-label">{copy.panelTitle}</span>
-            <p>{copy.panelBody}</p>
-            <div className="how-summary-tags">
-              {copy.steps.map((step) => (
-                <span key={step.title} className="how-showcase-badge">{step.title}</span>
-              ))}
-            </div>
-          </div>
+                {index < copy.steps.length - 1 ? (
+                  <div className="how-arrow" aria-hidden="true">
+                    <ArrowRight size={22} weight="bold" />
+                  </div>
+                ) : null}
+              </Fragment>
+            )
+          })}
         </div>
       </div>
     </section>

@@ -56,6 +56,8 @@ export function HeroCopyBlock({
   actionsClassName,
   formClassName,
   buttonClassName,
+  helperClassName,
+  trustListClassName,
   buttonIconSize = 18,
 }) {
   const signupForm = (
@@ -112,6 +114,20 @@ export function HeroCopyBlock({
       {actionsClassName ? (
         <div className={actionsClassName}>{signupForm}</div>
       ) : signupForm}
+
+      {copy.helper ? (
+        <p className={joinClassNames('hero-helper', helperClassName)}>{copy.helper}</p>
+      ) : null}
+
+      {copy.trustItems?.length ? (
+        <ul className={joinClassNames('hero-trust-list', trustListClassName)}>
+          {copy.trustItems.map((item) => (
+            <li key={item} className="hero-trust-item">
+              {item}
+            </li>
+          ))}
+        </ul>
+      ) : null}
     </>
   )
 }

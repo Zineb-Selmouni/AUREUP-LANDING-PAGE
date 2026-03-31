@@ -1,21 +1,32 @@
 import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import { cover2 } from '../images.js'
-import { HeroCopyBlock, PhoneFrame } from './HeroShared.jsx'
+import { heroMockupImg } from '../images.js'
+import { HeroCopyBlock } from './HeroShared.jsx'
 
 export default function Hero({ copy, waitlistCopy, email, onEmailChange }) {
   const heroRef = useRef(null)
 
   useGSAP(() => {
-    const timeline = gsap.timeline({ delay: 0.1 })
+    const timeline = gsap.timeline({ delay: 0.08 })
 
     timeline
-      .from('.hero-badge', { y: 24, opacity: 0, duration: 0.6, ease: 'power3.out' })
-      .from('.hero-title-line', { y: 42, opacity: 0, stagger: 0.1, duration: 0.8, ease: 'power3.out' }, '-=0.3')
-      .from('.hero-sub', { y: 24, opacity: 0, duration: 0.7, ease: 'power3.out' }, '-=0.45')
-      .from('.hero-actions', { y: 20, opacity: 0, duration: 0.55, ease: 'power3.out' }, '-=0.45')
-      .from('.hero-visual-card', { y: 28, opacity: 0, stagger: 0.1, duration: 0.7, ease: 'power3.out' }, '-=0.65')
+      .from('.hero-badge', { y: 20, opacity: 0, duration: 0.55, ease: 'power3.out' })
+      .from('.hero-title-line', { y: 32, opacity: 0, stagger: 0.08, duration: 0.72, ease: 'power3.out' }, '-=0.2')
+      .from('.hero-sub, .hero-actions, .hero-helper, .hero-trust-item', {
+        y: 18,
+        opacity: 0,
+        stagger: 0.06,
+        duration: 0.55,
+        ease: 'power3.out',
+      }, '-=0.36')
+      .from('.hero-stage, .hero-stage-note', {
+        y: 24,
+        opacity: 0,
+        stagger: 0.08,
+        duration: 0.65,
+        ease: 'power3.out',
+      }, '-=0.45')
   }, { scope: heroRef })
 
   return (
@@ -34,19 +45,28 @@ export default function Hero({ copy, waitlistCopy, email, onEmailChange }) {
               subtitleClassName="hero-sub"
               actionsClassName="hero-actions"
               buttonClassName="hero-primary-cta"
+              helperClassName="hero-helper"
+              trustListClassName="hero-trust-list"
             />
           </div>
 
           <div className="hero-visual">
-            <div className="hero-visual-panel liquid-card hero-visual-card">
-              <div className="hero-story-stage">
-                <div className="hero-phone-stage hero-phone-stage-clean">
-                  <PhoneFrame
-                    src={cover2}
-                    alt={copy.primaryPhoneAlt}
-                    className="phone-wrap hero-phone-front"
-                  />
-                </div>
+            <div className="hero-stage">
+              <div className="hero-stage-glow hero-stage-glow-a" aria-hidden="true" />
+              <div className="hero-stage-glow hero-stage-glow-b" aria-hidden="true" />
+
+              <div className="hero-stage-note hero-stage-note-top">
+                <span>{copy.visualNotes[0].label}</span>
+                <strong>{copy.visualNotes[0].value}</strong>
+              </div>
+
+              <div className="hero-phone-object">
+                <img src={heroMockupImg} alt={copy.primaryPhoneAlt} className="hero-mockup-image" />
+              </div>
+
+              <div className="hero-stage-note hero-stage-note-bottom">
+                <span>{copy.visualNotes[1].label}</span>
+                <strong>{copy.visualNotes[1].value}</strong>
               </div>
             </div>
           </div>

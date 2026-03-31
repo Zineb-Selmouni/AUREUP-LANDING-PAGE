@@ -1,10 +1,9 @@
 import { useRef, useState } from 'react'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import { ArrowRight, CheckCircle, LockKey, Sparkle } from '@phosphor-icons/react'
+import { ArrowRight, CheckCircle } from '@phosphor-icons/react'
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-const SIDE_ICONS = [Sparkle, CheckCircle, LockKey]
 
 export default function Waitlist({ copy, email, onEmailChange }) {
   const sectionRef = useRef(null)
@@ -12,13 +11,13 @@ export default function Waitlist({ copy, email, onEmailChange }) {
   const [status, setStatus] = useState('idle')
 
   useGSAP(() => {
-    gsap.from('.waitlist-panel, .waitlist-side-card, .waitlist-benefit', {
-      y: 26,
+    gsap.from('.waitlist-panel, .waitlist-perk', {
+      y: 24,
       opacity: 0,
-      stagger: 0.1,
-      duration: 0.72,
+      stagger: 0.08,
+      duration: 0.68,
       ease: 'power3.out',
-      scrollTrigger: { trigger: sectionRef.current, start: 'top 78%' },
+      scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' },
     })
   }, { scope: sectionRef })
 
@@ -54,22 +53,11 @@ export default function Waitlist({ copy, email, onEmailChange }) {
   return (
     <section ref={sectionRef} className="waitlist" id="waitlist">
       <div className="container">
-        <div className="waitlist-layout">
-          <div className="waitlist-panel liquid-card">
+        <div className="waitlist-panel liquid-card">
+          <div className="waitlist-main">
             <span className="eyebrow">{copy.eyebrow}</span>
             <h2 className="section-title">{copy.title}</h2>
             <p className="sub">{copy.subtitle}</p>
-
-            <ul className="waitlist-benefits" aria-label={copy.benefitsAria}>
-              {copy.benefits.map((benefit, index) => (
-                <li key={benefit} className="waitlist-benefit">
-                  <span className="waitlist-benefit-icon">
-                    <CheckCircle size={18} weight="fill" />
-                  </span>
-                  <span>{benefit}</span>
-                </li>
-              ))}
-            </ul>
 
             <form
               ref={formRef}
@@ -99,33 +87,26 @@ export default function Waitlist({ copy, email, onEmailChange }) {
 
             <p className="waitlist-privacy">
               {copy.privacy}
-              {isError && <span className="waitlist-feedback"> {copy.invalidEmail}</span>}
-              {isUnavailable && <span className="waitlist-feedback"> {copy.unavailable}</span>}
+              {isError ? <span className="waitlist-feedback"> {copy.invalidEmail}</span> : null}
+              {isUnavailable ? <span className="waitlist-feedback"> {copy.unavailable}</span> : null}
             </p>
           </div>
 
-          <aside className="waitlist-side">
-            <div className="waitlist-side-card liquid-card">
-              <span className="waitlist-side-label">{copy.cardTitle}</span>
-              <p>{copy.cardBody}</p>
-            </div>
+          <aside className="waitlist-side" aria-label={copy.benefitsAria}>
+            <span className="waitlist-side-label">{copy.perksTitle}</span>
 
-            <div className="waitlist-side-stack">
-              {copy.benefits.slice(0, 3).map((item, index) => {
-                const Icon = SIDE_ICONS[index]
+            <ul className="waitlist-perks">
+              {copy.benefits.map((benefit) => (
+                <li key={benefit} className="waitlist-perk">
+                  <span className="waitlist-benefit-icon">
+                    <CheckCircle size={18} weight="fill" />
+                  </span>
+                  <span>{benefit}</span>
+                </li>
+              ))}
+            </ul>
 
-                return (
-                  <div key={item} className="waitlist-side-card liquid-card">
-                    <span className="waitlist-side-icon">
-                      <Icon size={18} weight="fill" />
-                    </span>
-                    <div>
-                      <strong>{item}</strong>
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
+            <p className="waitlist-trust">{copy.trust}</p>
           </aside>
         </div>
       </div>

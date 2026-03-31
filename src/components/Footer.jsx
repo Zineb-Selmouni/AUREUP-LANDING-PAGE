@@ -12,9 +12,9 @@ export default function Footer({ theme, copy }) {
 
   useGSAP(() => {
     gsap.from('.footer-panel', {
-      y: 26,
+      y: 22,
       opacity: 0,
-      duration: 0.7,
+      duration: 0.65,
       ease: 'power3.out',
       scrollTrigger: { trigger: ref.current, start: 'top 90%' },
     })
@@ -24,24 +24,26 @@ export default function Footer({ theme, copy }) {
     <footer ref={ref} className="site-footer">
       <div className="container">
         <div className="footer-panel liquid-card">
-          <div className="footer-brand">
-            <img src={currentLogo} alt="Aure Up" />
-            <p>{copy.description}</p>
-          </div>
+          <div className="footer-top">
+            <div className="footer-brand">
+              <img src={currentLogo} alt="Aure Up" />
+              <p>{copy.description}</p>
+            </div>
 
-          <div className="footer-points">
-            {copy.points.map((point, index) => {
-              const Icon = FOOTER_ICONS[index]
+            <div className="footer-points">
+              {copy.points.map((point, index) => {
+                const Icon = FOOTER_ICONS[index]
 
-              return (
-                <div key={point} className="footer-point">
-                  <span className="footer-point-icon">
-                    <Icon size={18} weight="fill" />
-                  </span>
-                  <span>{point}</span>
-                </div>
-              )
-            })}
+                return (
+                  <div key={point} className="footer-point">
+                    <span className="footer-point-icon">
+                      <Icon size={18} weight="fill" />
+                    </span>
+                    <span>{point}</span>
+                  </div>
+                )
+              })}
+            </div>
           </div>
 
           <div className="foot-bottom">
