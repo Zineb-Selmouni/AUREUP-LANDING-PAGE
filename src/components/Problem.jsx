@@ -1,16 +1,16 @@
 import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import { ChartLineDown, EyeSlash, WarningCircle } from '@phosphor-icons/react'
+import { ChartLineDown, EyeSlash, TrendUp, WarningCircle } from '@phosphor-icons/react'
 import { problemImg } from '../images.js'
 
-const PROBLEM_ICONS = [EyeSlash, ChartLineDown, WarningCircle]
+const PROBLEM_ICONS = [EyeSlash, ChartLineDown, WarningCircle, TrendUp]
 
 export default function Problem({ copy }) {
   const ref = useRef(null)
 
   useGSAP(() => {
-    gsap.from('.problem-copy-block, .problem-media, .problem-point', {
+    gsap.from('.problem-copy-block, .problem-media, .problem-point, .problem-transition', {
       y: 28,
       opacity: 0,
       stagger: 0.1,
@@ -28,7 +28,6 @@ export default function Problem({ copy }) {
             <span className="eyebrow">{copy.eyebrow}</span>
             <h2 className="section-title">{copy.title}</h2>
             <p className="sub">{copy.intro}</p>
-            <p className="problem-body">{copy.body}</p>
 
             <ul className="problem-points">
               {copy.items.map((item, index) => {
@@ -44,6 +43,10 @@ export default function Problem({ copy }) {
                 )
               })}
             </ul>
+
+            {copy.transition ? (
+              <p className="problem-transition">{copy.transition}</p>
+            ) : null}
           </div>
 
           <div className="problem-media liquid-card">

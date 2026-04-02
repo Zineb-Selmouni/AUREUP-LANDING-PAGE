@@ -1,10 +1,18 @@
 import { useRef } from 'react'
 import { useGSAP } from '@gsap/react'
 import { gsap } from 'gsap'
-import { DeviceMobile, GlobeHemisphereWest, ShieldCheck } from '@phosphor-icons/react'
+import { DeviceMobile, FacebookLogo, GlobeHemisphereWest, InstagramLogo, LinkedinLogo, ShieldCheck, TiktokLogo, XLogo } from '@phosphor-icons/react'
 import { logoImg, logoImgLight } from '../images.js'
 
 const FOOTER_ICONS = [DeviceMobile, GlobeHemisphereWest, ShieldCheck]
+
+const SOCIAL_LINKS = [
+  { label: 'LinkedIn', href: '#', Icon: LinkedinLogo },
+  { label: 'Instagram', href: '#', Icon: InstagramLogo },
+  { label: 'Facebook', href: '#', Icon: FacebookLogo },
+  { label: 'TikTok', href: '#', Icon: TiktokLogo },
+  { label: 'X', href: '#', Icon: XLogo },
+]
 
 export default function Footer({ theme, copy }) {
   const ref = useRef(null)
@@ -28,6 +36,21 @@ export default function Footer({ theme, copy }) {
             <div className="footer-brand">
               <img src={currentLogo} alt="Aure Up" />
               <p>{copy.description}</p>
+
+              <div className="footer-social" aria-label="Social media links">
+                {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    className="footer-social-link"
+                    aria-label={label}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Icon size={17} weight="fill" />
+                  </a>
+                ))}
+              </div>
             </div>
 
             <div className="footer-points">

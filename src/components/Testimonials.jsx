@@ -4,9 +4,9 @@ import { gsap } from 'gsap'
 import { Quotes } from '@phosphor-icons/react'
 
 const AVATAR_BACKGROUNDS = [
-  'linear-gradient(135deg, #316cff 0%, #09006e 100%)',
-  'linear-gradient(135deg, #5b82ff 0%, #1f3fb4 100%)',
-  'linear-gradient(135deg, #1e2c74 0%, #316cff 100%)',
+  '#F472B6',
+  '#1ECFBA',
+  '#818CF8',
 ]
 
 export default function Testimonials({ copy }) {
